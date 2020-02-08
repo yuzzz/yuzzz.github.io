@@ -1,0 +1,215 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>SeaBattle</title>
+<style type="text/css">
+<!--
+.cell {
+	border: 1px solid #CCCCCC;
+}
+.ctable {
+  border-collapse: collapse;
+  border: 1px solid black;
+}
+
+.ctable table, .ctable th, .ctable td {
+  border: 1px solid black;
+}
+.ctable td {
+  padding:20px;
+}
+.happy {
+  cursor: url('images/happy.png'), auto;
+}
+.sad {
+  cursor: url('images/sad.png'), auto;
+}
+.ddbody {
+  cursor: url('images/meh.png'), auto;
+}
+.cell_cl {
+  background:#CCCCCC;
+}
+.cell_happy {
+  background-image: url("images/happy.png");
+}
+.cell_sad {
+  background-image: url("images/sad.png");
+}
+.cell_meh {
+  background-image: url("images/meh.png");
+}
+.cell_bomb {
+  background-image: url("images/512x512bb.jpg");
+    background-size: contain;
+    background-size: 100% 100%;
+}
+.cell_blast {
+  background-image: url("images/blast.gif");
+    background-size: contain;
+    background-size: 100% 100%;
+}
+.cell_think {
+  background-image: url("images/thinking.jpg");
+    background-size: contain;
+    background-size: 100% 100%;
+}
+
+-->
+</style>
+</head>
+
+<body>
+<input id="cellCount" name="cellCount" type="text" value="10">
+<input type="button" value="StartGame" onclick="createGame()">
+<input type="button" value="PauseGame" onclick="pauseGame()">
+<hr />
+     <table>
+      <tr>
+        <td id="pb1"></td>
+		<td id="pb2"></td>
+      </tr>
+    </table>
+<script type="text/javascript">
+
+    var music;
+    function createGame() {
+      music = playMusic();
+      var cellCountElm = document.getElementById("cellCount");
+      var cellCount = cellCountElm.value;
+	  createTable("pb1", "t1", "Alex 9", cellCount, cellCount);
+	  createTable("pb2", "t2", "Vald 17", cellCount, cellCount);
+	  createRndShip("t1", cellCount);
+      //createRndShip("t1", cellCount);
+	}
+    function pauseGame() {
+      music.pause();
+	}
+	function createTable(parentId, id, title, rows, cols){
+		var tablearea = document.getElementById(parentId);
+		var table = document.createElement('table');
+		var caption = document.createElement('caption');
+		table.appendChild(caption);
+		caption.appendChild(document.createTextNode(title));
+
+		table.setAttribute("id", id);
+        setClass(table, "ctable");
+		//table.classList.add("ctable");
+		//table.classList.add("happy");
+		
+		for (var i = 0; i < rows; ++i) {
+			var row = document.createElement('tr');
+			for (var j = 0; j < cols; ++j) {
+               	var cell = document.createElement('td');
+				cell.appendChild(document.createTextNode(""));
+				cell.addEventListener("click", function(){cellOnClick(this)}, false);
+                cell.setAttribute("id", id+"_r"+i+"_c"+j);
+
+                setClass(cell, "cell_think");
+				row.appendChild(cell);
+			}
+			table.appendChild(row);
+		}
+		
+		tablearea.appendChild(table);	
+	}
+	
+	function cellOnClick(elm) {
+      //element.hasAttribute('foo');
+      //element.getAttribute('foo');
+      //element.setAttribute('foo', value);
+      //element.removeAttribute('foo');
+      //elm.innerHTML = "1";
+      if(elm.bomb && elm.bomb==1) {
+          setClass(elm, "cell_blast");
+          playBlast();
+      } else {
+          setClass(elm, "cell_happy");
+          playUra();
+      }
+	  /*if(elm.cstate==0) {
+        setClass(elm, "cell_happy");
+		//elm.cstate = 2;
+		playXaxa();
+	  } else {
+        setClass(elm, "cell_sad");
+		//elm.cstate = 1;
+		playUa();
+	  }*/
+	}
+	
+	function createRndShip(id, max) {
+
+        var maxCount = max*max/2;
+        var count = 0;
+        while(count <= maxCount){
+            var cellId = id+"_r"+rnd(max)+"_c"+rnd(max);
+            var cell = document.getElementById(cellId);
+            if(cell.bomb && cell.bomb==1) {
+            } else {
+                cell.bomb = 1;
+                count += 1;
+            }
+        }
+        // for (var i = 0; i < max; ++i) {
+	    //     var cellId = id+"_r"+rnd(max)+"_c"+rnd(max);
+		// 	var cell = document.getElementById(cellId);
+        //     cell.bomb = 1;
+		// 	//setClass(cell, "cell_bomb");
+		// 	//cell.bomb = rnd(2);
+		// 	//console.log("cell.id:"+cellId+" cstate:"+cell.cstate);
+		// }
+	}
+		
+	function rnd(max) {
+        return Math.floor(Math.random() * max);
+	}
+	
+	function playLala() {
+	    var audio = new Audio('audio/lala.m4a');
+        audio.play();
+	}
+	function playUa() {
+	    var audio = new Audio('audio/ua.m4a');
+        audio.play();
+	}
+	function playXaxa() {
+	    var audio = new Audio('audio/xaxa.m4a');
+        audio.play();
+	}
+
+    function playBlast() {
+        var audio = new Audio('audio/Bomb+7.mp3');
+        audio.play();
+    }
+    function playUra() {
+        var audio = new Audio('audio/ura.m4a');
+        audio.play();
+    }
+    function playMusic() {
+   	    var audio = new Audio('music/01.mp3');
+        audio.play();
+        //audio.pause();
+        //audio.currentTime = 0;
+        return audio;
+   	}
+
+	function hasClass(ele,cls) {
+		return ele.className.match(new RegExp('(\\s|^)'+cls+'(\\s|$)'));
+	}
+	function setClass(ele,cls) {
+		ele.className = cls;
+	}
+	function addClass(ele,cls) {
+		if (!this.hasClass(ele,cls)) ele.className += " "+cls;
+	}
+	function removeClass(ele,cls) {
+		if (hasClass(ele,cls)) {
+			var reg = new RegExp('(\\s|^)'+cls+'(\\s|$)');
+			ele.className=ele.className.replace(reg,' ');
+		}
+	}
+</script>
+</body>
+</html>
