@@ -1,0 +1,132 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>SeaBattle</title>
+<style type="text/css">
+<!--
+#container {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  background-color: darkslategrey;
+  padding: 20px;
+}
+.white_key {
+  height: 250px;
+  width: 25px;
+  background-color: white;
+  border-width: 1px;
+  border-style: solid;
+  border-color: slategrey;
+  margin: 0px;
+}
+.white_key:hover {
+ margin: 2px;
+}
+.space_key {
+  height: 250px;
+  width: 25px;
+  margin: 0px;
+}
+
+.black_key {
+  height: 250px;
+  width: 25px;
+  background-color: black;
+  border-width: 1px;
+  border-style: solid;
+  border-color: slategrey;
+}
+-->
+</style>
+</head>
+
+<body>
+
+<input type="button" value="Bbox" onclick="playSong('pch.mp3')">
+<input type="button" value="ts" onclick="playSong('ts.mp3')">
+<input type="button" value="Bgm" onclick="playSong('bgm.mp3')">
+<input type="button" value="lala" onclick="playSong('lala.mp3')">
+
+<div id="container">
+
+    <div class="white_key" onmouseover="playNote('do.m4a')">do</div>
+    <!--<div class="black_key"></div>-->
+    <div class="white_key" onmouseover="playNote('re.m4a')">re</div>
+    <!--<div class="black_key"></div>-->
+    <div class="white_key" onmouseover="playNote('mi.m4a')">mi</div>
+
+    <div class="white_key" onmouseover="playNote('fa.m4a')">fa</div>
+    <!--<div class="black_key"></div>-->
+    <div class="white_key" onmouseover="playNote('co.m4a')">co</div>
+    <!--<div class="black_key"></div>-->
+    <div class="white_key" onmouseover="playNote('la.m4a')">la</div>
+    <!--<div class="black_key"></div>-->
+    <div class="white_key" onmouseover="playNote('si.m4a')">si</div>
+
+    <div class="space_key"></div>
+
+    <div class="white_key" onmouseover="playNote2('a.wav')">do</div>
+    <!--<div class="black_key"></div>-->
+    <div class="white_key" onmouseover="playNote2('b.wav')">re</div>
+    <!--<div class="black_key"></div>-->
+    <div class="white_key" onmouseover="playNote2('c.wav')">mi</div>
+
+    <div class="white_key" onmouseover="playNote2('d.wav')">fa</div>
+    <!--<div class="black_key"></div>-->
+    <div class="white_key" onmouseover="playNote2('e.wav')">co</div>
+    <!--<div class="black_key"></div>-->
+    <div class="white_key" onmouseover="playNote2('f.wav')">la</div>
+    <!--<div class="black_key"></div>-->
+    <div class="white_key" onmouseover="playNote2('g.wav')">si</div>
+
+</div>
+<!--<input id="cellCount" name="cellCount" type="text" value="10">
+<input type="button" value="StartGame" onclick="createGame()">
+<input type="button" value="PauseGame" onclick="pauseGame()">
+<hr />
+     <table>
+      <tr>
+        <td id="pb1"></td>
+		<td id="pb2"></td>
+      </tr>
+    </table>-->
+
+<script type="text/javascript">
+
+    function playSong(song) {
+        var song = new Audio('audio/'+song);
+        song.controls = true;
+        song.loop = true;
+        //song.autoplay = true;
+        song.play();
+   	}
+
+	function playNote(note) {
+        var audio = new Audio('audio/'+note);
+        audio.play();
+	}
+    function playNote2(note) {
+           var audio = new Audio('notes/'+note);
+           audio.play();
+   	}
+
+	function hasClass(ele,cls) {
+		return ele.className.match(new RegExp('(\\s|^)'+cls+'(\\s|$)'));
+	}
+	function setClass(ele,cls) {
+		ele.className = cls;
+	}
+	function addClass(ele,cls) {
+		if (!this.hasClass(ele,cls)) ele.className += " "+cls;
+	}
+	function removeClass(ele,cls) {
+		if (hasClass(ele,cls)) {
+			var reg = new RegExp('(\\s|^)'+cls+'(\\s|$)');
+			ele.className=ele.className.replace(reg,' ');
+		}
+	}
+</script>
+</body>
+</html>
