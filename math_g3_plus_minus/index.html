@@ -1,0 +1,199 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>SeaBattle</title>
+<style type="text/css">
+<!--
+.cell {
+	border: 1px solid #CCCCCC;
+}
+.ctable {
+  border-collapse: collapse;
+  border: 1px solid black;
+}
+
+.ctable table, .ctable th, .ctable td {
+  border: 1px solid black;
+}
+.ctable td {
+  padding:20px;
+}
+.happy {
+  cursor: url('images/happy.png'), auto;
+}
+.sad {
+  cursor: url('images/sad.png'), auto;
+}
+.cell_cl {
+  background:#CCCCCC;
+}
+.cell_happy {
+  background-color: #03dd42;
+}
+.cell_sad {
+  background-color: #fb1502;
+}
+
+-->
+</style>
+</head>
+
+<body>
+<input id="cellCount" name="cellCount" type="text" value="10">
+max<input id="maxNum" name="maxNum" type="text" value="10">
+<input type="button" value="StartGame" onclick="createGame()">
+<hr />
+     <table>
+      <tr>
+        <td id="pb1"></td>
+		<td id="pb2"></td>
+      </tr>
+    </table>
+<script type="text/javascript">
+
+    var music;
+    function createGame() {
+      //music = playMusic();
+      var cellCount = document.getElementById("cellCount").value;
+      var maxNum = document.getElementById("maxNum").value;
+	  createTable("pb1", "t1", "Alex Math", cellCount, cellCount, maxNum);
+      //createRndShip("t1", cellCount);
+	}
+    function pauseGame() {
+      music.pause();
+	}
+	function createTable(parentId, id, title, rows, cols, maxNum){
+		var tablearea = document.getElementById(parentId);
+		var table = document.createElement('table');
+		var caption = document.createElement('caption');
+		table.appendChild(caption);
+		caption.appendChild(document.createTextNode(title));
+
+		table.setAttribute("id", id);
+		table.classList.add("ctable");
+
+		for (var i = 0; i < rows; ++i) {
+			var row = document.createElement('tr');
+			for (var j = 0; j < cols; ++j) {
+               	var cell = document.createElement('td');
+				cell.appendChild(document.createTextNode(""));
+				//cell.addEventListener("click", function(){cellOnClick(this)}, false);
+                cell.setAttribute("id", id+"_r"+i+"_c"+j);
+
+                var operation = rnd(2);
+                var x = getRandomInt(1, maxNum);
+                var y = getRandomInt(1, maxNum);
+                while ( x < y) {
+                    x = getRandomInt(1, maxNum);
+                }
+                var z = 0;
+                var zStr = "";
+
+                if(rnd(2)==0) {
+                    z = x - y;
+                    zStr = "" + x + "-" + y + "=";
+                } else {
+                    z = x + y;
+                    zStr = "" + x + "+" + y + "=";
+                }
+                var rezIn = createInput('input');
+                rezIn.z = z;
+                var btn = createCheckBtn(rezIn, cell);
+                cell.appendChild(document.createTextNode(zStr));
+                cell.appendChild(rezIn);
+                cell.appendChild(btn);
+
+				row.appendChild(cell);
+			}
+			table.appendChild(row);
+		}
+		
+		tablearea.appendChild(table);	
+	}
+
+    function createInput(type, value) {
+        var inp = document.createElement('input');
+        inp.type = type;
+        inp.size = 5;
+        if(value) {
+            inp.value = value;
+        }
+        return inp;
+    }
+    function createCheckBtn(rezIn, cell) {
+        var inp = document.createElement('input');
+        inp.type = "button";
+        inp.size = 5;
+        inp.value = "OK?";
+        inp.addEventListener("click", function(){checkValue(rezIn, cell)}, false);
+        return inp;
+    }
+    function checkValue(elm, cell) {
+      if(elm.value==elm.z) {
+        setClass(cell, "cell_happy");
+        playXaxa();
+      } else {
+        //elm.value = "";
+        setClass(cell, "cell_sad");
+        playUa();
+      }
+    }
+    
+	function cellOnClick(elm) {
+      //elm.innerHTML = "1";
+	  if(elm.cstate==0) {
+        setClass(elm, "cell_happy");
+		//elm.cstate = 2;
+		playXaxa();
+	  } else {
+        setClass(elm, "cell_sad");
+		//elm.cstate = 1;
+		playUa();
+	  }
+	}
+	
+	function rnd(max) {
+        return Math.floor(Math.random() * max);
+	}
+	
+	function playXaxa() {
+	    var audio = new Audio('audio/xaxa.m4a');
+        audio.play();
+	}
+    function playUa() {
+   	    var audio = new Audio('audio/ua.m4a');
+           audio.play();
+   	}
+    function getRandomInt(min, max) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function playMusic() {
+   	    var audio = new Audio('music/01.mp3');
+        audio.play();
+        //audio.pause();
+        //audio.currentTime = 0;
+        return audio;
+   	}
+
+	function hasClass(ele,cls) {
+		return ele.className.match(new RegExp('(\\s|^)'+cls+'(\\s|$)'));
+	}
+	function setClass(ele,cls) {
+		ele.className = cls;
+	}
+	function addClass(ele,cls) {
+		if (!this.hasClass(ele,cls)) ele.className += " "+cls;
+	}
+	function removeClass(ele,cls) {
+		if (hasClass(ele,cls)) {
+			var reg = new RegExp('(\\s|^)'+cls+'(\\s|$)');
+			ele.className=ele.className.replace(reg,' ');
+		}
+	}
+</script>
+</body>
+</html>
